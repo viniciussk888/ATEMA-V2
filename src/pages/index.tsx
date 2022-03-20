@@ -39,6 +39,7 @@ export default function SignIn() {
   const { setMessage, setOpenAlert } = useAlert()
 
   const { errors } = formState;
+  //**** */
 
   const handleSignIn: SubmitHandler<SignInFormData> = async (data) => {
     const { user, error } = await supabase.auth.signIn(data);

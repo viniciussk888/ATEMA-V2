@@ -1,5 +1,5 @@
 import { Icon, Link, Stack, Text } from "@chakra-ui/react";
-import { RiShoppingCart2Line, RiFileList3Line, RiFileCopy2Line, RiHandCoinLine } from "react-icons/ri";
+import { RiLayout4Fill, RiUserFill, RiFileCopy2Fill, RiFileEditFill, RiPieChartFill, RiEditBoxFill } from "react-icons/ri";
 import { NavLink } from "./NavLink";
 import { NavSection } from "./NavSection";
 
@@ -7,14 +7,17 @@ export function SidebarNav() {
   return (
     <Stack spacing="12" align="flex-start">
       <NavSection title="GERAL">
-        <NavLink icon={RiFileCopy2Line} href="/dashboard">Dashboard</NavLink>
-        <NavLink icon={RiFileCopy2Line} href="/comandas">Comandas</NavLink>
-        <NavLink icon={RiShoppingCart2Line} href="/products">Produtos</NavLink>
+        <NavLink icon={RiLayout4Fill} href="/dashboard">Dashboard</NavLink>
+        <NavLink icon={RiFileCopy2Fill} href="/atlas">Atlas Toponímico</NavLink>
+        <NavLink icon={RiPieChartFill} href="/graphs">Gerar gráficos</NavLink>
+        <NavLink icon={RiEditBoxFill} href="/admin-blog">Blog</NavLink>
+        <NavLink icon={RiUserFill} href="/users">Usuários</NavLink>
+        <NavLink icon={RiFileEditFill} href="/registers">Registros</NavLink>
       </NavSection>
-      <NavSection title="FINANCEIRO">
+      {/* <NavSection title="AJUSTES">
         <NavLink icon={RiHandCoinLine} href="/caixa">Caixa</NavLink>
         <NavLink icon={RiFileList3Line} href="/reports">Relatórios</NavLink>
-      </NavSection>
+      </NavSection> */}
     </Stack>
   )
 }
