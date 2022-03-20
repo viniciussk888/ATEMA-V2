@@ -10,6 +10,7 @@ const Atlas: React.FC = () => {
 
             <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
                 <SideBar />
+                <h1>Teste</h1>
             </Flex>
         </Flex>
     );
