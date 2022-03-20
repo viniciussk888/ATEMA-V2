@@ -1,7 +1,7 @@
 import { Flex } from '@chakra-ui/react';
 import React from 'react';
-import { Header } from '../components/Header';
-import { SideBar } from '../components/Sidebar';
+import { Header } from '../../components/Header';
+import { SideBar } from '../../components/Sidebar';
 
 const Graphs: React.FC = () => {
     return (

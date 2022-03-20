@@ -13,13 +13,13 @@ import {
 import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { Input } from "../components/form/Input";
-import { supabase } from "../utils/supabaseClient";
-import { Alert } from "../components/Alert";
+import { Input } from "../../components/form/Input";
+import { supabase } from "../../utils/supabaseClient";
+import { Alert } from "../../components/Alert";
 import { useContext, useState } from "react";
 import Router from "next/router";
-import { Logo } from "../components/Header/Logo";
-import { useAlert } from '../contexts/AlertContext';
+import { Logo } from "../../components/Header/Logo";
+import { useAlert } from '../../contexts/AlertContext';
 
 type SignInFormData = {
   email: string;
