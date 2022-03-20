@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Flex, Heading, HStack, SimpleGrid, VStack } from '@chakra-ui/react'
+import { Box, Button, Checkbox, Divider, Flex, Heading, HStack, SimpleGrid, Stack, Text, VStack } from '@chakra-ui/react'
 import Link from 'next/link'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
@@ -33,11 +33,11 @@ export default function CreateUser() {
   const { errors } = formState
 
   const handleCreateUser: SubmitHandler<CreateUserData> = async (data) => {
-    const {user,error,session} = await supabase.auth.signUp({
-        email: data.email,
-        password: data.password,
+    const { user, error, session } = await supabase.auth.signUp({
+      email: data.email,
+      password: data.password,
     })
-    console.log(user,error,session)
+    console.log(user, error, session)
   }
 
   return (
@@ -51,7 +51,7 @@ export default function CreateUser() {
           as="form"
           flex="1"
           borderRadius={8}
-          bg="gray.800"
+          bg="gray.50"
           p={["6", "8"]}
           onSubmit={handleSubmit(handleCreateUser)}
         >
@@ -92,21 +92,40 @@ export default function CreateUser() {
                 {...register("password_confirmation")}
               />
             </SimpleGrid>
+
+            <SimpleGrid w="100%">
+              <Text>Permissões</Text>
+              <Stack mt={2} spacing={5} direction='row'>
+                <Checkbox>Criar</Checkbox>
+                <Checkbox>
+                  Alterar
+                </Checkbox>
+                <Checkbox>
+                  Blog
+                </Checkbox>
+                <Checkbox>
+                  Admin
+                </Checkbox>
+              </Stack>
+            </SimpleGrid>
+
           </VStack>
 
           <Flex mt="8" justify="flex-end">
             <HStack spacing="4">
-              <Link href="/comandas" passHref>
+              <Link href="/users" passHref>
                 <Button
                   as="a"
-                  colorScheme="whiteAlpha"
+                  backgroundColor='red.400'
+                  colorScheme="red.900"
                 >
                   Cancelar
                 </Button>
               </Link>
               <Button
                 type="submit"
-                colorScheme="pink"
+                backgroundColor='green.400'
+                colorScheme="green.400"
                 isLoading={formState.isSubmitting}
               >
                 Salvar
