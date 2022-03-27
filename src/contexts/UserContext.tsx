@@ -1,3 +1,4 @@
+import Router from "next/router";
 import {
     createContext,
     ReactElement,
@@ -27,6 +28,7 @@ interface UserProvider {
     setNewEmail: (value: string) => void;
     token: string,
     checkPermission: (value: string) => boolean;
+    logout: () => void;
 }
 
 const UserContext = createContext<UserProvider>({
@@ -42,6 +44,7 @@ const UserContext = createContext<UserProvider>({
     setNewUser: () => { },
     setNewToken: () => { },
     setNewEmail: () => { },
+    logout: () => { },
     checkPermission: () => false,
 });
 
@@ -81,8 +84,24 @@ export function UserProvider({ children }: UserProviderProps) {
         }
     }
 
+    const logout = () => {
+        setUser({
+            username: "",
+            admin: false,
+            blog: false,
+            insert: false,
+            update: false,
+        });
+        setToken("");
+        setEmail("");
+        localStorage.removeItem('@atema/user');
+        localStorage.removeItem('@atema/token');
+        localStorage.removeItem('@atema/email');
+        Router.push("/");
+    }
+
     return (
-        <UserContext.Provider value={{ user, setNewUser, email, setNewEmail, token, setNewToken, checkPermission }}>
+        <UserContext.Provider value={{ user, setNewUser, email, setNewEmail, token, setNewToken, checkPermission,logout }}>
             {children}
         </UserContext.Provider>
     );
