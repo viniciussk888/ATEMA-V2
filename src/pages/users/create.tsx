@@ -4,10 +4,9 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 
 import { Input } from '../../components/form/Input'
-import { Header } from '../../components/Header'
-import { SideBar } from '../../components/Sidebar'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { supabase } from '../../utils/supabaseClient'
+import { Layout } from '../../components/Layout'
 
 type CreateUserData = {
   name: string
@@ -41,12 +40,7 @@ export default function CreateUser() {
   }
 
   return (
-    <Box>
-      <Header />
-
-      <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
-        <SideBar />
-
+    <Layout>
         <Box
           as="form"
           flex="1"
@@ -133,7 +127,6 @@ export default function CreateUser() {
             </HStack>
           </Flex>
         </Box>
-      </Flex>
-    </Box>
+    </Layout>
   )
 }
