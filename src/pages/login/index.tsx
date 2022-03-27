@@ -20,10 +20,12 @@ import { useContext, useState } from "react";
 import Router from "next/router";
 import { Logo } from "../../components/Header/Logo";
 import { useAlert } from '../../contexts/AlertContext';
+import { api_atema } from '../../services/api';
+import { useUserSession } from '../../contexts/UserContext';
 
 type SignInFormData = {
   email: string;
-  passowrd: string;
+  password: string;
 };
 
 const signInSchema = yup.object().shape({
@@ -32,6 +34,8 @@ const signInSchema = yup.object().shape({
 });
 
 export default function SignIn() {
+  const { setNewToken, setNewUser, setNewEmail } = useUserSession()
+  const [loading, setLoading] = useState(false);
   const { register, handleSubmit, formState } = useForm({
     resolver: yupResolver(signInSchema),
   });
@@ -39,17 +43,27 @@ export default function SignIn() {
   const { setMessage, setOpenAlert } = useAlert()
 
   const { errors } = formState;
-  //**** */
 
   const handleSignIn: SubmitHandler<SignInFormData> = async (data) => {
-    const { user, error } = await supabase.auth.signIn(data);
-    if (error) {
+    setLoading(true);
+    try {
+      const response = await api_atema.post('sessions', {
+        email: data.email,
+        password: data.password,
+      })
+      if (response.status === 200) {
+        setNewEmail(data.email)
+        setNewToken(response.data[0].token);
+        setNewUser(response.data[1]);
+        Router.push("/dashboard");
+      }
+    } catch (err) {
       setOpenAlert(true);
-      setMessage(error.message);
-      return console.log(error);
+      setMessage("Falha no login, tente novamente.");
+      console.log(err);
+    } finally {
+      setLoading(false);
     }
-    localStorage.setItem("@comandasgo", JSON.stringify(user));
-    Router.push("/comandas");
   };
 
   return (
@@ -83,7 +97,7 @@ export default function SignIn() {
               <Checkbox>Lembrar</Checkbox>
               <Link color={'blue.500'}>Esqueceu sua senha?</Link>
             </Stack>
-            <Button type="submit" backgroundColor='green.400' colorScheme={'green.400'} variant={'solid'}>
+            <Button isLoading={loading} type="submit" backgroundColor='green.400' colorScheme={'green.400'} variant={'solid'}>
               Entrar
             </Button>
           </Stack>
