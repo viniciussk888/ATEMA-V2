@@ -50,7 +50,7 @@ const Blog: React.FC = () => {
                 gridGap="1.5rem"
                 gridTemplateColumns="repeat(auto-fit, minmax(300px, 1fr))"
                 gridAutoRows="minmax(200px, auto)">
-                {posts.map(post => (
+                {posts.map(post => ( 
                     <CardBlog key={post.id} author={post.author} content={post.content} created_at={post.created_at} id={post.id} title={post.title} image={post.image} updated_at={post.updated_at} />
                 ))}
             </Box>

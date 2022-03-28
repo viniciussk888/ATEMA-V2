@@ -9,6 +9,7 @@ import {
     Avatar,
     Image,
     useColorModeValue,
+    Button
 } from '@chakra-ui/react';
 import { formatDate } from '../../utils/formateDate';
 
@@ -58,8 +59,9 @@ const CardBlog = ({ author, content, created_at, id, image, title, updated_at }:
                         {content?.substring(0, 150)}...
                     </Text>
                 </Stack>
-                <Stack mt={6} direction={'row'} spacing={4} align={'center'}>
-                    <Avatar
+                <Stack mt={6} direction={'row'} spacing={4} align={'center'} justifyContent="space-between">
+                    <Box display="flex" flexDirection="row" alignItems="center">
+                    <Avatar mr="3"
                         name={author}
                         alt={author}
                     />
@@ -67,6 +69,8 @@ const CardBlog = ({ author, content, created_at, id, image, title, updated_at }:
                         <Text fontWeight={600}>{author}</Text>
                         <Text color={'gray.500'}>{formatDate(created_at)}</Text>
                     </Stack>
+                    </Box>
+                    <Button as="a"  href={`/post/${id}`} color="green.400" variant="outline" colorScheme="green.400">Ver detalhes</Button>
                 </Stack>
             </Box>
         </Center>
