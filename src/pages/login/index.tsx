@@ -14,7 +14,6 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { Input } from "../../components/form/Input";
-import { supabase } from "../../utils/supabaseClient";
 import { Alert } from "../../components/Alert";
 import { useContext, useState } from "react";
 import Router from "next/router";
