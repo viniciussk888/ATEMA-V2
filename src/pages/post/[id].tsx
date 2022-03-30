@@ -51,7 +51,7 @@ const post: React.FC = () => {
               lineHeight={1.1}
               fontWeight={600}
               fontSize={{ base: '2xl', sm: '4xl', lg: '5xl' }}>
-              Automatic Watch
+              Automatic Watch ahdga
             </Heading>
           </Box>
 
