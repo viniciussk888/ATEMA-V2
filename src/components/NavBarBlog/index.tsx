@@ -9,6 +9,7 @@ import {
     useDisclosure,
     useColorModeValue,
     Stack,
+    Divider,
 } from '@chakra-ui/react';
 import { FaWindowClose, FaBars } from 'react-icons/fa';
 import { Logo } from '../Header/Logo';
@@ -23,7 +24,7 @@ const NavLink = ({ children }: { children: ReactNode }) => (
         rounded={'md'}
         _hover={{
             textDecoration: 'none',
-            bg: useColorModeValue('gray.200', 'gray.700'),
+            bg: useColorModeValue('gray.50', 'gray.700'),
         }}
         href={'/'}>
         {children}
@@ -34,10 +35,11 @@ const NavBarBlog: React.FC = ({ children }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     return (
         <>
-            <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4}>
-                <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
+            <Box bg={useColorModeValue('white', 'gray.800')} px={10} borderBottom={1}
+                borderStyle={'solid'} borderColor={useColorModeValue('gray.50', 'gray.900')}>
+                <Flex h={20} alignItems={'center'} justifyContent={'space-between'}>
                     <IconButton
-                        size={'md'}
+                        size={'lg'}
                         icon={isOpen ? <FaWindowClose size={30} /> : <FaBars size={30} />}
                         aria-label={'Open Menu'}
                         display={{ md: 'none' }}

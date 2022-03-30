@@ -82,7 +82,7 @@ const post: React.FC = () => {
         </Stack>
       </SimpleGrid>
     </Container>
-    <FooterBlog></FooterBlog>
+    <FooterBlog/>
       </NavBarBlog>
         
   );
