@@ -2,6 +2,7 @@ import { Box, Skeleton, Spinner, Stack, useMenuState } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import CardBlog from "../components/CardBlog";
 import NavBarBlog from "../components/NavBarBlog";
+import FooterBlog from '../components/FooterBlog';
 import { api_atema } from "../services/api";
 
 interface Post {
@@ -21,7 +22,7 @@ const Blog: React.FC = () => {
         async function fetchData() {
             const response = await api_atema.get('/post');
             if (response.status === 200) {
-               setPosts(response.data)
+                setPosts(response.data)
             }
         }
         fetchData();
@@ -44,17 +45,21 @@ const Blog: React.FC = () => {
     }
 
     return (
-        <NavBarBlog>
-            <Box overflow="auto"
-                display="grid"
-                gridGap="1.5rem"
-                gridTemplateColumns="repeat(auto-fit, minmax(300px, 1fr))"
-                gridAutoRows="minmax(200px, auto)">
-                {posts.map(post => ( 
-                    <CardBlog key={post.id} author={post.author} content={post.content} created_at={post.created_at} id={post.id} title={post.title} image={post.image} updated_at={post.updated_at} />
-                ))}
-            </Box>
-        </NavBarBlog>
+        <>
+            <NavBarBlog>
+                <Box overflow="auto"
+                    display="grid"
+                    gridGap="1.5rem"
+                    gridTemplateColumns="repeat(auto-fit, minmax(300px, 1fr))"
+                    gridAutoRows="minmax(200px, auto)">
+                    {posts.map(post => (
+                        <CardBlog key={post.id} author={post.author} content={post.content} created_at={post.created_at} id={post.id} title={post.title} image={post.image} updated_at={post.updated_at} />
+                    ))}
+                </Box>
+            </NavBarBlog>
+            <br/>
+            <FooterBlog />
+        </>
     );
 }
 

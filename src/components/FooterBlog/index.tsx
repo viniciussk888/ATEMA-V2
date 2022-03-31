@@ -52,6 +52,8 @@ const SocialButton = ({
 };
 
 export default function LargeWithAppLinksAndSocial() {
+  const dataAtual = new Date();
+  const anoAtual = dataAtual.getFullYear();
   return (
     <Box
       bg={useColorModeValue('gray.50', 'gray.900')}
@@ -59,30 +61,30 @@ export default function LargeWithAppLinksAndSocial() {
       <Container as={Stack} maxW={'6xl'} py={10}>
         <SimpleGrid columns={{ base: 1, sm: 2, md: 4 }} spacing={8}>
           <Stack align={'flex-start'}>
-            <ListHeader>Company</ListHeader>
-            <Link href={'#'}>About Us</Link>
-            <Link href={'#'}>Blog</Link>
-            <Link href={'#'}>Careers</Link>
-            <Link href={'#'}>Contact Us</Link>
+            <ListHeader>ATEMA</ListHeader>
+            <Link href={'/'}>Blog</Link>
+            <Link href={'/about'}>Sobre</Link>
+            <Link href={'/contact'}>Contato</Link>
+          </Stack>
+          <Stack align={'flex-start'}>
+            <ListHeader>UEMA</ListHeader>
+            <Link href={'https://www.uema.br/'}>Site</Link>
+            <Link href={'https://uemanet.uema.br/'}>UEMA Net</Link>
+            <Link href={'http://www.biblioteca.uema.br/'}>Biblioteca</Link>
           </Stack>
 
-          <Stack align={'flex-start'}>
-            <ListHeader>Support</ListHeader>
-            <Link href={'#'}>Help Center</Link>
-            <Link href={'#'}>Safety Center</Link>
-            <Link href={'#'}>Community Guidelines</Link>
-          </Stack>
-
-          <Stack align={'flex-start'}>
-            <ListHeader>Legal</ListHeader>
-            <Link href={'#'}>Cookies Policy</Link>
-            <Link href={'#'}>Privacy Policy</Link>
-            <Link href={'#'}>Terms of Service</Link>
-            <Link href={'#'}>Law Enforcement</Link>
-          </Stack>
-
-          <Stack align={'flex-start'}>
-            <ListHeader>Install App</ListHeader>
+          <Stack align={'flex-end'}>
+            <Stack direction={'row'} spacing={6}>
+              <SocialButton label={'Twitter'} href={'https://twitter.com/UemaOficial'}>
+                <FaTwitter />
+              </SocialButton>
+              <SocialButton label={'YouTube'} href={'https://www.youtube.com/channel/UC75nEe_agWiU6KdeWDpWHRA'}>
+                <FaYoutube />
+              </SocialButton>
+              <SocialButton label={'Instagram'} href={'https://www.instagram.com/uemaoficial/'}>
+                <FaInstagram />
+              </SocialButton>
+            </Stack>
           </Stack>
         </SimpleGrid>
       </Container>
@@ -99,18 +101,7 @@ export default function LargeWithAppLinksAndSocial() {
           spacing={4}
           justify={{ md: 'space-between' }}
           align={{ md: 'center' }}>
-          <Text>© 2020 Chakra Templates. All rights reserved</Text>
-          <Stack direction={'row'} spacing={6}>
-            <SocialButton label={'Twitter'} href={'#'}>
-              <FaTwitter />
-            </SocialButton>
-            <SocialButton label={'YouTube'} href={'#'}>
-              <FaYoutube />
-            </SocialButton>
-            <SocialButton label={'Instagram'} href={'#'}>
-              <FaInstagram />
-            </SocialButton>
-          </Stack>
+          <Text>© {anoAtual} Desenvolvido por <a target='_blank' rel="noreferrer" href='https://viniciussk888.github.io/'>Vinicius Martins</a> e <a target="_blank" rel="noreferrer" href='https://github.com/livia-oliveira'>Livia Oliveira</a>. Todos os direitos reservados</Text>
         </Container>
       </Box>
     </Box>
