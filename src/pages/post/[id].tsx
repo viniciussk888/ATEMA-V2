@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable react-hooks/rules-of-hooks */
+import React, { useEffect, useState } from 'react';
 import NavBarBlog from '../../components/NavBarBlog';
 import FooterBlog from '../../components/FooterBlog';
 
@@ -20,13 +21,59 @@ import {
   VisuallyHidden,
   List,
   ListItem,
+  Spinner,
 } from '@chakra-ui/react';
 import { FaInstagram, FaTwitter, FaArrowLeft } from 'react-icons/fa';
 import { MdLocalShipping } from 'react-icons/md';
 import { useRouter } from 'next/router';
+import { api_atema } from '../../services/api';
+import { formatDate } from '../../utils/formateDate';
+
+interface Post {
+  author: string;
+  content: string;
+  created_at: string;
+  id: number;
+  image: string;
+  title: string;
+  updated_at: string;
+}
 
 const Post: React.FC = () => {
   const router = useRouter();
+  const { id } = router.query
+  const [post, setPost] = useState<Post | null>(null);
+
+  useEffect(() => {
+    async function fetchData() {
+      if (id) {
+        const response = await api_atema.get(`/post/${id}`);
+        if (response.status === 200) {
+          setPost(response.data)
+        }
+      }
+    }
+    fetchData();
+  }, [id]);
+
+  if (post === null) {
+    return (
+      <>
+        <NavBarBlog>
+          <Box marginTop='30vh' display="flex" alignItems='center' justifyContent='center'>
+            <Spinner
+              thickness='4px'
+              speed='0.65s'
+              emptyColor='gray.200'
+              color='green.500'
+              size='xl'
+            />
+          </Box>
+        </NavBarBlog>
+      </>
+    )
+  }
+
   return (
     <>
       <NavBarBlog>
@@ -40,9 +87,7 @@ const Post: React.FC = () => {
               <Image
                 rounded={'md'}
                 alt={'product image'}
-                src={
-                  'https://images.unsplash.com/photo-1596516109370-29001ec8ec36?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwyODE1MDl8MHwxfGFsbHx8fHx8fHx8fDE2Mzg5MzY2MzE&ixlib=rb-1.2.1&q=80&w=1080'
-                }
+                src={post?.image || 'https://via.placeholder.com/300x300'}
                 fit={'cover'}
                 align={'center'}
                 w={'100%'}
@@ -55,7 +100,7 @@ const Post: React.FC = () => {
                   lineHeight={1.1}
                   fontWeight={600}
                   fontSize={{ base: '2xl', sm: '4xl', lg: '5xl' }}>
-                  Automatic Watch ahdga
+                  {post?.title}
                 </Heading>
               </Box>
 
@@ -68,18 +113,14 @@ const Post: React.FC = () => {
                   />
                 }>
                 <VStack spacing={{ base: 4, sm: 6 }}>
+                  <Text fontSize={'lg'}>
+                    {post?.content}
+                  </Text>
                   <Text
                     color={useColorModeValue('gray.500', 'gray.400')}
-                    fontSize={'2xl'}
+                    fontSize={'large'}
                     fontWeight={'300'}>
-                    Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                    diam nonumy eirmod tempor invidunt ut labore
-                  </Text>
-                  <Text fontSize={'lg'}>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad
-                    aliquid amet at delectus doloribus dolorum expedita hic, ipsum
-                    maxime modi nam officiis porro, quae, quisquam quos
-                    reprehenderit velit? Natus, totam.
+                    Autor: {post?.author} - Publicado em: {formatDate(post?.created_at)}
                   </Text>
                 </VStack>
               </Stack>
