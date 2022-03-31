@@ -55,6 +55,7 @@ const NavBarBlog: React.FC = ({ children }) => {
                 <Flex h={20} alignItems={'center'} justifyContent={'space-between'}>
                     <IconButton
                         size={'lg'}
+                        backgroundColor='white'
                         icon={isOpen ? <FaWindowClose size={30} /> : <FaBars size={30} />}
                         aria-label={'Open Menu'}
                         display={{ md: 'none' }}
