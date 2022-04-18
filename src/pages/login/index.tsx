@@ -9,6 +9,7 @@ import {
   Stack,
   Image,
   Box,
+  useBreakpointValue,
 } from '@chakra-ui/react';
 import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -33,6 +34,10 @@ const signInSchema = yup.object().shape({
 });
 
 export default function SignIn() {
+  const isWideVersion = useBreakpointValue({
+    base: false,
+    lg: true,
+  });
   const { setNewToken, setNewUser, setNewEmail } = useUserSession()
   const [loading, setLoading] = useState(false);
   const { register, handleSubmit, formState } = useForm({
@@ -102,15 +107,15 @@ export default function SignIn() {
           </Stack>
         </Stack>
       </Flex >
-      <Flex flex={1}>
+      {isWideVersion && <Flex flex={1} borderLeftWidth={1} borderColor="gray.500">
         <Image
           alt={'Login Image'}
           objectFit={'cover'}
           src={
-            'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1352&q=80'
+            'https://user-images.githubusercontent.com/30902898/163825590-fa72643f-a9aa-455d-a4b9-2d06529074d3.png'
           }
         />
-      </Flex>
+      </Flex>}
     </Stack >
   );
 }
