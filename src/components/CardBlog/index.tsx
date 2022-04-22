@@ -60,7 +60,7 @@ const CardBlog = ({ deleteOption = false, removePost, author, content, created_a
                     mb={6}
                     pos={'relative'}>
                     <Image
-                        src={image}
+                        src={image|| 'https://user-images.githubusercontent.com/30902898/163825590-fa72643f-a9aa-455d-a4b9-2d06529074d3.png'}
                         layout={'fill'}
                     />
                 </Box>

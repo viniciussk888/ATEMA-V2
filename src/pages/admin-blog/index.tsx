@@ -2,6 +2,7 @@ import { Box, FormControl, FormLabel, Input, Button, Divider, Spinner } from '@c
 import React, { useEffect, useState } from 'react';
 import CardBlog from '../../components/CardBlog';
 import { Layout } from '../../components/Layout';
+import { useAlert } from '../../contexts/AlertContext';
 import { useUserSession } from '../../contexts/UserContext';
 import { api_atema } from '../../services/api';
 
@@ -19,24 +20,31 @@ const AdminBlog: React.FC = () => {
     const { user, token } = useUserSession()
     const [posts, setPosts] = useState<Post[]>([]);
     const [loading, setLoading] = useState(false);
+    const [loadingPost, setLoadingPost] = useState(false);
     const [file, setFile] = useState<any>('');
     const [title, setTitle] = useState('');
     const [text, setText] = useState('');
+    const { setMessage, setOpenAlert } = useAlert()
 
     async function handlePost(e) {
         e.preventDefault();
+        setLoadingPost(true);
         const config = {
             headers: { Authorization: `Bearer ${token}` }
         };
         if (!title || !text) {
-            return alert('Informe o titulo e conteudo!');
+            setLoadingPost(false);
+            setOpenAlert(true);
+            return setMessage("Informe o titulo e conteudo!");
         }
         try {
             const formData = new FormData();
             formData.append('file', file);
             const response = await api_atema.post('files', formData, config);
             if (!response.data.url) {
-                return alert('Erro ao fazer upload da imagem!');
+                setLoadingPost(false);
+                setOpenAlert(true);
+                return setMessage("Erro ao fazer upload da imagem!");
             }
             const { data } = await api_atema.post(
                 'post',
@@ -48,9 +56,16 @@ const AdminBlog: React.FC = () => {
                 }
             );
             setPosts([...posts, data]);
+            setFile('');
+            setTitle('');
+            setText('');
+            setOpenAlert(true);
+            setMessage("Post criado com sucesso!");
 
         } catch (error) {
             console.log(error)
+        } finally {
+            setLoadingPost(false);
         }
     }
 
@@ -81,15 +96,15 @@ const AdminBlog: React.FC = () => {
             <Box>
                 <FormControl onSubmit={handlePost} as="form" isRequired>
                     <FormLabel htmlFor='title'>Titulo</FormLabel>
-                    <Input onChange={(e) => setTitle(e.target.value)} id='title' placeholder='Escreva o titulo' />
+                    <Input value={title} onChange={(e) => setTitle(e.target.value)} id='title' placeholder='Escreva o titulo' />
 
                     <FormLabel htmlFor='Imagem'>Imagem</FormLabel>
                     <Input onChange={(e) => setFile(e.target.files[0])} type='file' id='Imagem' placeholder='Selecione a imagem' />
 
                     <FormLabel htmlFor='text'>Texto</FormLabel>
-                    <Input onChange={(e) => setText(e.target.value)} as="textarea" height='250' id='text' placeholder='Digite o texto do post' />
+                    <Input value={text} onChange={(e) => setText(e.target.value)} as="textarea" height='250' id='text' placeholder='Digite o texto do post' />
 
-                    <Button type='submit' color="white" backgroundColor='green.400' colorScheme='green.400'>Enviar</Button>
+                    <Button isLoading={loadingPost} type='submit' color="white" backgroundColor='green.400' colorScheme='green.400'>Enviar</Button>
                 </FormControl>
             </Box>
             <Divider mt='10' mb='10' orientation='horizontal' />
