@@ -5,7 +5,6 @@ import * as yup from 'yup'
 
 import { Input } from '../../components/form/Input'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { supabase } from '../../utils/supabaseClient'
 import { Layout } from '../../components/Layout'
 
 type CreateUserData = {
@@ -32,11 +31,7 @@ export default function CreateUser() {
   const { errors } = formState
 
   const handleCreateUser: SubmitHandler<CreateUserData> = async (data) => {
-    const { user, error, session } = await supabase.auth.signUp({
-      email: data.email,
-      password: data.password,
-    })
-    console.log(user, error, session)
+   
   }
 
   return (
