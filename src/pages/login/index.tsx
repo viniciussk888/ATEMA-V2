@@ -9,21 +9,23 @@ import {
   Stack,
   Image,
   Box,
+  useBreakpointValue,
 } from '@chakra-ui/react';
 import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { Input } from "../../components/form/Input";
-import { supabase } from "../../utils/supabaseClient";
 import { Alert } from "../../components/Alert";
 import { useContext, useState } from "react";
 import Router from "next/router";
 import { Logo } from "../../components/Header/Logo";
 import { useAlert } from '../../contexts/AlertContext';
+import { api_atema } from '../../services/api';
+import { useUserSession } from '../../contexts/UserContext';
 
 type SignInFormData = {
   email: string;
-  passowrd: string;
+  password: string;
 };
 
 const signInSchema = yup.object().shape({
@@ -32,6 +34,12 @@ const signInSchema = yup.object().shape({
 });
 
 export default function SignIn() {
+  const isWideVersion = useBreakpointValue({
+    base: false,
+    lg: true,
+  });
+  const { setNewToken, setNewUser, setNewEmail } = useUserSession()
+  const [loading, setLoading] = useState(false);
   const { register, handleSubmit, formState } = useForm({
     resolver: yupResolver(signInSchema),
   });
@@ -39,17 +47,27 @@ export default function SignIn() {
   const { setMessage, setOpenAlert } = useAlert()
 
   const { errors } = formState;
-  //**** */
 
   const handleSignIn: SubmitHandler<SignInFormData> = async (data) => {
-    const { user, error } = await supabase.auth.signIn(data);
-    if (error) {
+    setLoading(true);
+    try {
+      const response = await api_atema.post('sessions', {
+        email: data.email,
+        password: data.password,
+      })
+      if (response.status === 200) {
+        setNewEmail(data.email)
+        setNewToken(response.data[0].token);
+        setNewUser(response.data[1]);
+        Router.push("/dashboard");
+      }
+    } catch (err) {
       setOpenAlert(true);
-      setMessage(error.message);
-      return console.log(error);
+      setMessage("Falha no login, tente novamente.");
+      console.log(err);
+    } finally {
+      setLoading(false);
     }
-    localStorage.setItem("@comandasgo", JSON.stringify(user));
-    Router.push("/comandas");
   };
 
   return (
@@ -83,21 +101,21 @@ export default function SignIn() {
               <Checkbox>Lembrar</Checkbox>
               <Link color={'blue.500'}>Esqueceu sua senha?</Link>
             </Stack>
-            <Button type="submit" backgroundColor='green.400' colorScheme={'green.400'} variant={'solid'}>
+            <Button isLoading={loading} type="submit" backgroundColor='green.400' colorScheme={'green.400'} variant={'solid'}>
               Entrar
             </Button>
           </Stack>
         </Stack>
       </Flex >
-      <Flex flex={1}>
+      {isWideVersion && <Flex flex={1} borderLeftWidth={1} borderColor="gray.500">
         <Image
           alt={'Login Image'}
           objectFit={'cover'}
           src={
-            'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1352&q=80'
+            'https://user-images.githubusercontent.com/30902898/163825590-fa72643f-a9aa-455d-a4b9-2d06529074d3.png'
           }
         />
-      </Flex>
+      </Flex>}
     </Stack >
   );
 }

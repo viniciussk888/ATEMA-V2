@@ -5,7 +5,7 @@ import { NavSection } from "./NavSection";
 
 export function SidebarNav() {
   return (
-    <Stack spacing="12" align="flex-start">
+    <Stack spacing="12" width='250px' align="flex-start">
       <NavSection title="GERAL">
         <NavLink icon={RiLayout4Fill} href="/dashboard">Dashboard</NavLink>
         <NavLink icon={RiFileCopy2Fill} href="/atlas">Atlas Toponímico</NavLink>
