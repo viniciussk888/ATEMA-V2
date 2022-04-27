@@ -9,6 +9,7 @@ import { Layout } from '../../components/Layout'
 import { api_atema } from '../../services/api'
 import { useAlert } from '../../contexts/AlertContext'
 import Router from 'next/router'
+import { useState } from 'react'
 
 type CreateUserData = {
   username: string

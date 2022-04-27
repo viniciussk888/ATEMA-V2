@@ -34,20 +34,19 @@ interface User {
 }
 
 export default function Users() {
-  const { token } = useUserSession();
+  const [loading, setLoading] = useState(false)
   const isWideVersion = useBreakpointValue({
     base: false,
     lg: true,
   });
   const [users, setUsers] = useState<User[]>([]);
 
-  const config = {
-    headers: { Authorization: `Bearer ${token}` },
-  };
-
   const { setMessage, setOpenAlert } = useAlert();
 
   useEffect(() => {
+    const config = {
+      headers: { Authorization: `Bearer ${localStorage.getItem('@atema/token')}` },
+    };
     async function fetchData() {
       const response = await api_atema.get("/users", config);
       console.log(response.data);
@@ -59,14 +58,21 @@ export default function Users() {
   }, []);
 
   const deleteUser = async (id) => {
+    setLoading(true)
+    const config = {
+      headers: { Authorization: `Bearer ${localStorage.getItem('@atema/token')}` },
+    };
     try {
       const response = await api_atema.delete(`/users/${id}`, config);
-      if (response.status === 200) {
+      if (response.status === 204) {
         setOpenAlert(true);
-        setMessage("O usuário foi excluído");
+        setMessage("O usuário foi deletado com sucesso!");
+        setUsers(users.filter((user) => user.id !== id));
       }
     } catch (erro) {
       console.log(erro);
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -117,7 +123,7 @@ export default function Users() {
                   <Td px={["4", "4", "6"]}>{user.blog ? "SIM" : "NÃO"}</Td>
                   <Td px={["4", "4", "6"]}>
                     <Button
-                      as="a"
+                      isLoading={loading}
                       size="sm"
                       fontSize="sm"
                       colorScheme="red"
