@@ -4,23 +4,30 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 
 import { Input } from '../../components/form/Input'
-import { Header } from '../../components/Header'
-import { SideBar } from '../../components/Sidebar'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { supabase } from '../../utils/supabaseClient'
+import { Layout } from '../../components/Layout'
+import { api_atema } from '../../services/api'
+import { useAlert } from '../../contexts/AlertContext'
+import Router from 'next/router'
+import { useState } from 'react'
 
 type CreateUserData = {
-  name: string
+  username: string
   email: string
   password: string
-  passowrd_confirmation: string
+  password_confirm?: string
+  admin: boolean;
+  criar: boolean;
+  alterar: boolean;
+  blog: boolean;
+  
 }
 
 const createUserSchema = yup.object().shape({
-  name: yup.string().required("Nome obrigatório"),
+  username: yup.string().required("Nome obrigatório"),
   email: yup.string().required("Email obrigatório").email("E-mail inválido"),
   password: yup.string().required("Senha obrigatória").min(6, "No mínimo 6 caracteres"),
-  password_confirmation: yup.string().oneOf([
+  password_confirm: yup.string().oneOf([
     null, yup.ref("password")
   ], "As senhas precisam ser iguais")
 })
@@ -30,23 +37,26 @@ export default function CreateUser() {
     resolver: yupResolver(createUserSchema)
   })
 
+  const { setMessage, setOpenAlert } = useAlert()
+
   const { errors } = formState
 
   const handleCreateUser: SubmitHandler<CreateUserData> = async (data) => {
-    const { user, error, session } = await supabase.auth.signUp({
-      email: data.email,
-      password: data.password,
-    })
-    console.log(user, error, session)
+    try {
+      delete data.password_confirm
+      const response = await api_atema.post('/users',data);
+      if(response.status===200){
+        setOpenAlert(true)
+        setMessage('Usuário cadastrado com sucesso')
+        return Router.back()
+      }
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (
-    <Box>
-      <Header />
-
-      <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
-        <SideBar />
-
+    <Layout>
         <Box
           as="form"
           flex="1"
@@ -62,10 +72,10 @@ export default function CreateUser() {
           <VStack>
             <SimpleGrid minChildWidth="240px" spacing={["6", "8"]} w="100%">
               <Input
-                name="name"
-                label="Nome completo"
-                error={errors?.name}
-                {...register("name")}
+                name="username"
+                label="Nome de usuário"
+                error={errors?.username}
+                {...register("username")}
               />
               <Input
                 name="email"
@@ -85,25 +95,39 @@ export default function CreateUser() {
                 {...register("password")}
               />
               <Input
-                name="password_confirmation"
+                name="password_confirm"
                 type="password"
                 label="Confirmação de senha"
-                error={errors?.password_confirmation}
-                {...register("password_confirmation")}
+                error={errors?.password_confirm}
+                {...register("password_confirm")}
               />
             </SimpleGrid>
 
             <SimpleGrid w="100%">
               <Text>Permissões</Text>
               <Stack mt={2} spacing={5} direction='row'>
-                <Checkbox>Criar</Checkbox>
-                <Checkbox>
+                <Checkbox
+                name="insert"
+                {...register("insert")}
+                >
+                  Criar
+                </Checkbox>
+                <Checkbox
+                name="update"
+                {...register("update")}
+                >
                   Alterar
                 </Checkbox>
-                <Checkbox>
+                <Checkbox
+                name="blog"
+                {...register("blog")}
+                >
                   Blog
                 </Checkbox>
-                <Checkbox>
+                <Checkbox
+                name="admin"
+                {...register("admin")}
+                >
                   Admin
                 </Checkbox>
               </Stack>
@@ -133,7 +157,6 @@ export default function CreateUser() {
             </HStack>
           </Flex>
         </Box>
-      </Flex>
-    </Box>
+    </Layout>
   )
 }
